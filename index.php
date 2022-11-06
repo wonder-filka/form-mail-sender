@@ -1,24 +1,17 @@
 <?php
-// несколько получателей
-$to .= 'i.filonova@ukr.net';
-
-// тема письма
-$subject = 'Письмо с моего сайта';
-
-// текст письма
-$message = 'Пользователь' . $_POST['name'] . ' отправил вам письмо:<br />' . $_POST['message'] . '<br />
-Связяться с ним можно по email <a href="mailto:' . $_POST['email'] . '">' . $_POST['email'] . '</a>'
-;
-
-// Для отправки HTML-письма должен быть установлен заголовок Content-type
-$headers  = 'MIME-Version: 1.0' . "\r\n";
-$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n"; 
-
-// Дополнительные заголовки
-$headers .= 'To: Иван <i.filonova@ukr.net>' . "\r\n"; // Свое имя и email
-$headers .= 'From: '  . $_POST['name'] . '<' . $_POST['email'] . '>' . "\r\n";
-
-
-// Отправляем
-mail($to, $subject, $message, $headers);
-?>
+$fio = $_POST['fio'];
+$email = $_POST['email'];
+$fio = htmlspecialchars($fio);
+$email = htmlspecialchars($email);
+$fio = urldecode($fio);
+$email = urldecode($email);
+$fio = trim($fio);
+$email = trim($email);
+//echo $fio;
+//echo "<br>";
+//echo $email;
+if (mail("i.filonova@ukr.net", "Заявка с сайта", "ФИО:".$fio.". E-mail: ".$email ,"From: i.filonova@ukr.net \r\n"))
+ {     echo "сообщение успешно отправлено";
+} else {
+    echo "при отправке сообщения возникли ошибки";
+}?>
