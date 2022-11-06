@@ -1,71 +1,24 @@
 <?php
-	use PHPMailer\PHPMailer\PHPMailer;
-	use PHPMailer\PHPMailer\Exception;
+// несколько получателей
+$to .= 'i.filonova@ukr.net';
 
-	require 'phpmailer/src/Exception.php';
-	require 'phpmailer/src/PHPMailer.php';
+// тема письма
+$subject = 'Письмо с моего сайта';
 
-	$mail = new PHPMailer(true);
-	$mail->CharSet = 'UTF-8';
-	$mail->setLanguage('ru', 'phpmailer/language/');
-	$mail->IsHTML(true);
+// текст письма
+$message = 'Пользователь' . $_POST['name'] . ' отправил вам письмо:<br />' . $_POST['message'] . '<br />
+Связяться с ним можно по email <a href="mailto:' . $_POST['email'] . '">' . $_POST['email'] . '</a>'
+;
 
-	//От кого письмо
-	$mail->setFrom('lolly.oops.shop@gmail.com', 'Письмо из моего сайтв');
-	//Кому отправить
-	$mail->addAddress('i.filonova@ukr.net');
-	//Тема письма
-	$mail->Subject = 'Привет! Все работает)"';
+// Для отправки HTML-письма должен быть установлен заголовок Content-type
+$headers  = 'MIME-Version: 1.0' . "\r\n";
+$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n"; 
 
-	//Рука
-	$hand = "Правая";
-	if($_POST['hand'] == "left"){
-		$hand = "Левая";
-	}
+// Дополнительные заголовки
+$headers .= 'To: Иван <i.filonova@ukr.net>' . "\r\n"; // Свое имя и email
+$headers .= 'From: '  . $_POST['name'] . '<' . $_POST['email'] . '>' . "\r\n";
 
-	//Тело письма
-	$body = '<h1>Встречайте супер письмо!</h1>';
-	
-	if(trim(!empty($_POST['name']))){
-		$body.='<p><strong>Имя:</strong> '.$_POST['name'].'</p>';
-	}
-	if(trim(!empty($_POST['email']))){
-		$body.='<p><strong>E-mail:</strong> '.$_POST['email'].'</p>';
-	}
-	if(trim(!empty($_POST['hand']))){
-		$body.='<p><strong>Рука:</strong> '.$hand.'</p>';
-	}
-	if(trim(!empty($_POST['age']))){
-		$body.='<p><strong>Возраст:</strong> '.$_POST['age'].'</p>';
-	}
-	
-	if(trim(!empty($_POST['message']))){
-		$body.='<p><strong>Сообщение:</strong> '.$_POST['message'].'</p>';
-	}
-	
-	//Прикрепить файл
-	if (!empty($_FILES['image']['tmp_name'])) {
-		//путь загрузки файла
-		$filePath = __DIR__ . "/files/" . $_FILES['image']['name']; 
-		//грузим файл
-		if (copy($_FILES['image']['tmp_name'], $filePath)){
-			$fileAttach = $filePath;
-			$body.='<p><strong>Фото в приложении</strong>';
-			$mail->addAttachment($fileAttach);
-		}
-	}
 
-	$mail->Body = $body;
-
-	//Отправляем
-	if (!$mail->send()) {
-		$message = 'Ошибка';
-	} else {
-		$message = 'Данные отправлены!';
-	}
-
-	$response = ['message' => $message];
-
-	header('Content-type: application/json');
-	echo json_encode($response);
+// Отправляем
+mail($to, $subject, $message, $headers);
 ?>
