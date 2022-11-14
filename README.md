@@ -9,7 +9,7 @@ Buy the domain and host it.
 
 ### Links
 
-- GitHub URL: [GitHub](https://github.com/wonder-filka/)
+- GitHub URL: [GitHub](https://github.com/wonder-filka/form-mail-sender)
 - Live Site URL: [lolly-oops-shop](http://lolly-oops-shop.website/)
 
 ## My process
